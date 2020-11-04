@@ -11,8 +11,13 @@ import { NotFound } from './Pages/NotFound';
 import { Token } from './Pages/Token';
 
 const routes = {
+  '/': () => <Home />,
   '/dmc': () => <Home />,
+  '/dmc/': () => <Home />,
   '/dmc/token/:symbol': ({ symbol }) => <Token symbol={symbol} />,
+  '/dmc/token/:symbol/': ({ symbol }) => <Token symbol={symbol} />,
+  '/token/:symbol/': ({ symbol }) => <Token symbol={symbol} />,
+  '/token/:symbol': ({ symbol }) => <Token symbol={symbol} />,
 };
 
 const App = () => {
