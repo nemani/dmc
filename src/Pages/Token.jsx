@@ -5,7 +5,7 @@ import { Box, Heading, Distribution, Text } from 'grommet';
 import { DataGraph } from '../Components/DataGraph';
 import { PageWrapper } from '../Components/PageWrapper';
 
-const getRandomColor = () => {
+export const getRandomColor = () => {
   const letters = '0123456789ABCDEF';
   let color = '#';
   for (var i = 0; i < 6; i++) {

@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Chart from 'kaktana-react-lightweight-charts';
 import { Button, defaultProps, ThemeContext } from 'grommet';
+import { getRandomColor } from '../Pages/Token';
 
 export const DataGraph = ({ symbol }) => {
   const graphOptions = {
-    lineColor: 'white',
-    bottomColor: 'goldenrod',
-    topColor: 'red',
+    lineColor: getRandomColor(),
+    bottomColor: getRandomColor(),
+    topColor: getRandomColor(),
     lineWidth: 3,
-    title: 'BTC/USD',
+    title: `${symbol}/USD`,
   };
 
   const options = {
@@ -65,7 +66,7 @@ export const DataGraph = ({ symbol }) => {
   const fetchData = async () => {
     // console.log('fetching new data');
     const res = await fetch(
-      `https://api.coingecko.com/api/v3/coins/${symbol}/market_chart?vs_currency=usd&days=360&interval=daily`
+      `https://api.coingecko.com/api/v3/coins/${symbol.toLowerCase()}/market_chart?vs_currency=usd&days=360&interval=daily`
     );
     res
       .json()

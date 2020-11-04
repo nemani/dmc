@@ -15,7 +15,7 @@ export const Navbar = ({ dark, setDark }) => (
     elevation="medium"
     style={{ zIndex: '1' }}
   >
-    <Anchor as={A} label=" Data Market Cap " href="/" />
+    <Anchor as={A} label=" Data Market Cap " href="/dmc" />
     <Clock type="digital" />
     <Button
       onClick={() => {

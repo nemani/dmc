@@ -28,7 +28,7 @@ export const NotFound = () => (
       <Heading level="2" margin={{ horizontal: 'none', vertical: 'large' }}>
         Lost?
       </Heading>
-      <Anchor as={A} icon={<Rewind />} label="Back to Home Page" href="/" />
+      <Anchor as={A} icon={<Rewind />} label="Back to Home Page" href="/dmc" />
     </Box>
   </PageWrapper>
 );

@@ -11,9 +11,8 @@ import { NotFound } from './Pages/NotFound';
 import { Token } from './Pages/Token';
 
 const routes = {
-  '/': () => <Home />,
-  '/about': () => <NotFound />,
-  '/token/:symbol': ({ symbol }) => <Token symbol={symbol} />,
+  '/dmc': () => <Home />,
+  '/dmc/token/:symbol': ({ symbol }) => <Token symbol={symbol} />,
 };
 
 const App = () => {
