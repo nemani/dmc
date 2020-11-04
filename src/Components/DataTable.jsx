@@ -13,7 +13,7 @@ export const MyDataTable = (props) => {
           search: c.property === 'name' || c.property === 'symbol',
         }))}
         onClickRow={(e) => {
-          navigate(`/token/${e.datum.symbol}`);
+          navigate(`/token/${e.datum.name}`);
         }}
         data={DATA}
         pad={{
