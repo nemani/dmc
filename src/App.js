@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
-function App() {
+import { useRoutes } from 'hookrouter';
+
+import { Grommet } from 'grommet';
+import { grommet } from 'grommet/themes';
+
+import { Navbar } from './Components/Navbar';
+import { Home } from './Pages/Home';
+import { NotFound } from './Pages/NotFound';
+import { Token } from './Pages/Token';
+
+const routes = {
+  '/': () => <Home />,
+  '/about': () => <NotFound />,
+  '/token/:symbol': ({ symbol }) => <Token symbol={symbol} />,
+};
+
+const App = () => {
+  const match = useRoutes(routes);
+  const [dark, setDark] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Grommet theme={grommet} cssVars full themeMode={dark ? 'dark' : 'light'}>
+      <Navbar dark={dark} setDark={setDark} />
+      {match || <NotFound />}
+    </Grommet>
   );
-}
+};
 
 export default App;
