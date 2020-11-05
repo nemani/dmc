@@ -1,6 +1,6 @@
 {
   "name": "grommet-dmc",
-  "homepage": "https://datamarketcap.xyz",
+  "homepage": "https://nemani.github.io/dmc",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
