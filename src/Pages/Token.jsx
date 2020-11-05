@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// import { A } from 'hookrouter';
-
-import { Box, Heading, Distribution, Text } from 'grommet';
+import { Box, Text, Heading, Paragraph } from 'grommet';
 import { DataGraph } from '../Components/DataGraph';
 import { PageWrapper } from '../Components/PageWrapper';
 
@@ -19,16 +17,20 @@ const convertCase = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-export const Token = ({ symbol, ...props }) => {
+export const Token = ({ did, ...props }) => {
   const [tokenDetails, setTokenDetails] = useState({
-    symbol,
-    props,
-    otherDetails: [],
+    symbol: 'LOAD',
+    name: 'loading',
+    price: 0,
+    description: 'Please wait while the description is being loaded !',
+    priceOcean: 0,
+    otherDetails: [{ color: 'white', dataKey: 'state', dataValue: 'loading' }],
   });
+
   const [hasError, setErrors] = useState(false);
 
   const handleData = (res) => {
-    let { name, price, description, priceOcean, ...otherDetails } = res;
+    let { name, symbol, price, description, priceOcean, ...otherDetails } = res;
 
     otherDetails = Object.entries(otherDetails).map(
       ([dataKey, dataValue], index, arr) => {
@@ -42,6 +44,7 @@ export const Token = ({ symbol, ...props }) => {
 
     setTokenDetails({
       name,
+      symbol,
       price,
       description,
       priceOcean,
@@ -50,7 +53,9 @@ export const Token = ({ symbol, ...props }) => {
   };
 
   const fetchData = async () => {
-    const res = await fetch('http://localhost:8080/test.json');
+    const res = await fetch(
+      `https://data-marketcap-backend.herokuapp.com/datatoken/${did}`
+    );
     res
       .json()
       .then((res) => handleData(res))
@@ -70,35 +75,34 @@ export const Token = ({ symbol, ...props }) => {
       ]}
     >
       <Box gridArea="top" direction="row">
-        <Box pad="medium" background={getRandomColor()} fill>
+        <Box pad="medium" fill>
           <Text size="large"> Name: {tokenDetails.name}</Text>
         </Box>
-        <Box pad="medium" background={getRandomColor()} fill>
-          <Text size="large"> Symbol: {symbol}</Text>
+        <Box pad="medium" fill>
+          <Text size="large"> Symbol: {tokenDetails.symbol}</Text>
         </Box>
-        <Box pad="medium" background={getRandomColor()} fill>
+        <Box pad="medium" fill>
           <Text size="large">Price: {tokenDetails.price} USD</Text>
         </Box>
-        <Box pad="medium" background={getRandomColor()} fill>
+        <Box pad="medium" fill>
           <Text size="large"> Price: {tokenDetails.priceOcean} Ocean</Text>
         </Box>
       </Box>
       <Box gridArea="left" fill>
-        <DataGraph symbol={symbol} />
-        <Box pad="medium" background={getRandomColor()} fill>
-          <Text size="large">Description</Text>
-          <Text size="small">{tokenDetails.description}</Text>
+        <DataGraph symbol="bitcoin" />
+        <Box pad="medium" fill>
+          <Heading pad="small" margin="none" level="4">
+            Description
+          </Heading>
+          <Paragraph fill>{tokenDetails.description}</Paragraph>
         </Box>
       </Box>
       <Box gridArea="right">
         {tokenDetails.otherDetails.map((property) => (
-          <Box
-            pad="medium"
-            background={property.color}
-            key={property.dataKey}
-            fill
-          >
-            <Text size="large">{convertCase(property.dataKey)}</Text>
+          <Box pad="small" border="small" key={property.dataKey} fill>
+            <Heading margin="none" pad="small" level="4">
+              {convertCase(property.dataKey)}
+            </Heading>
             <Text size="medium">{property.dataValue}</Text>
           </Box>
         ))}

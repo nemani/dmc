@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Chart from 'kaktana-react-lightweight-charts';
-import { Button, defaultProps, ThemeContext } from 'grommet';
-import { getRandomColor } from '../Pages/Token';
+import { ThemeContext } from 'grommet';
 
-export const DataGraph = ({ symbol }) => {
+export const DataGraph = ({ symbol, darkTheme }) => {
+  const theme = useContext(ThemeContext);
+  console.log(theme);
   const graphOptions = {
-    lineColor: getRandomColor(),
-    bottomColor: getRandomColor(),
-    topColor: getRandomColor(),
+    lineColor: '#F03A47',
+    bottomColor: '#5E080D',
+    topColor: '#F68D94',
     lineWidth: 3,
     title: `${symbol}/USD`,
   };
@@ -20,19 +21,19 @@ export const DataGraph = ({ symbol }) => {
       autoScale: true,
     },
     layout: {
-      backgroundColor: '#FAEBD7',
-      textColor: '#696969',
+      backgroundColor: theme.dark ? '#3E5C76' : '#FBC2FF',
+      textColor: theme.dark ? '#FBC2FF' : '#3E5C76',
       fontSize: 12,
       fontFamily: 'Calibri',
     },
     grid: {
       vertLines: {
-        color: 'rgba(70, 130, 180, 0.5)',
+        color: '#F03A47',
         style: 1,
         visible: true,
       },
       horzLines: {
-        color: 'rgba(70, 130, 180, 0.5)',
+        color: '#F03A47',
         style: 1,
         visible: true,
       },
@@ -58,7 +59,6 @@ export const DataGraph = ({ symbol }) => {
   };
 
   const [areaSeries, setAreaSeries] = useState();
-  const theme = useContext(ThemeContext);
 
   const handleData = (res) =>
     res.prices.map((c) => ({ time: new Date(c[0]).toJSON(), value: c[1] }));
@@ -83,6 +83,11 @@ export const DataGraph = ({ symbol }) => {
 
   useEffect(() => fetchData(), []);
   return (
-    <Chart options={options} areaSeries={areaSeries} autoWidth darkTheme />
+    <Chart
+      options={options}
+      areaSeries={areaSeries}
+      autoWidth
+      darkTheme={darkTheme}
+    />
   );
 };
