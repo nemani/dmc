@@ -36,13 +36,12 @@ export const columns = [
     property: 'volume_tkn',
     header: 'Volume (Token)',
     align: 'end',
-    render: (datum) => amountFormatterTkn(datum.volume_tkn, datum.symbol),
+    render: (datum) => amountFormatterUSD.format(datum.volume),
   },
   {
     property: 'circulatingSupply',
     header: 'Circulating Supply',
     align: 'end',
-    render: (datum) =>
-      amountFormatterTkn(datum.circulatingSupply, datum.symbol),
+    render: (datum) => datum.circulatingSupply
   },
 ];
