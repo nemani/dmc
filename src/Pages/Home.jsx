@@ -1,19 +1,52 @@
 import React from 'react';
-import { A } from 'hookrouter';
+import Container from '../Components/Container';
+import { Box, Heading, Text } from 'grommet';
+import * as Icons from 'grommet-icons'; // TODO: only import necessary icons
 
-import { Anchor, Box, Heading, Grid } from 'grommet';
-import { MyDataTable } from '../Components/DataTable';
-import { PageWrapper } from '../Components/PageWrapper';
-
-export const Home = () => (
-  <PageWrapper
-    rows={['full']}
-    columns={['15%', '70%', '15%']}
-    areas={[{ name: 'middle', start: [1, 0], end: [1, 0] }]}
+const PercentChange = ({ value, postfix }) => (
+  <Box
+    direction="row"
+    gap="xxsmall"
+    align="center"
+    round="xsmall"
+    background={{
+      color: value < 0 ? 'status-critical' : 'status-ok',
+      opacity: 'strong',
+    }}
+    pad={{ horizontal: 'xsmall' }}
   >
-    <Box gridArea="middle">
-      <Heading level="3">Top Data Tokens Today: </Heading>
-      <MyDataTable></MyDataTable>
-    </Box>
-  </PageWrapper>
+    {value < 0 ? (
+      <Icons.Down color="white" size="small" />
+    ) : (
+      <Icons.Up color="white" size="small" />
+    )}
+
+    <Text size="small" weight="bold" color="white">
+      {Math.abs(value)}
+      {postfix}
+    </Text>
+  </Box>
 );
+
+PercentChange.defaultProps = {
+  postfix: '',
+};
+
+const Home = () => {
+  return (
+    <Container margin={{ vertical: 'medium' }}>
+      <Heading level={3} margin={{ vertical: 'small' }}>
+        Today's Token Prices by Market Cap
+      </Heading>
+      <Box direction="row" gap="xxsmall">
+        <Text size="small">
+          The global OCEAN market cap is <strong>$450.63B</strong>, a
+        </Text>
+        <PercentChange value={9.8} postfix="%" />
+        <Text size="small">change over the last day.</Text>
+      </Box>
+    </Container>
+  );
+};
+
+export default Home;
