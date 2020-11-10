@@ -1,24 +1,26 @@
+import { Tag } from './Tag';
+
 const amountFormatterUSD = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   minimumFractionDigits: 2,
 });
 
-const amountFormatterTkn = (prop, symbol) => {
-  const formatter = new Intl.NumberFormat('en-US', {});
-  return formatter.format(prop) + ' ' + symbol;
-};
+// const amountFormatterTkn = (prop, symbol) => {
+//   const formatter = new Intl.NumberFormat('en-US', {});
+//   return formatter.format(prop) + ' ' + symbol;
+// };
 
-export const columns = [
+export const DataTableColumns = [
   { property: '#', header: '#' },
   {
     property: 'name',
     header: 'Name',
-    primary: true,
   },
   {
     property: 'symbol',
     header: 'Symbol',
+    primary: true,
   },
   {
     property: 'price',
@@ -42,6 +44,20 @@ export const columns = [
     property: 'circulatingSupply',
     header: 'Circulating Supply',
     align: 'end',
-    render: (datum) => datum.circulatingSupply
+    render: (datum) => datum.circulatingSupply,
+  },
+  {
+    property: 'tags',
+    header: 'tags',
+    align: 'end',
+    render: (datum) => {
+      // Todo: remove this when we get tags from API, or let if be :shrug:
+      if (!datum.tags) {
+        return [];
+      }
+      return datum.tags.map((x) => {
+        return <Tag key={x} children={x} />;
+      });
+    },
   },
 ];

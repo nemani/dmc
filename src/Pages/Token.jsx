@@ -52,17 +52,18 @@ export const Token = ({ did, ...props }) => {
     });
   };
 
-  const fetchData = async () => {
-    const res = await fetch(
-      `https://data-marketcap-backend.herokuapp.com/datatoken/${did}`
-    );
-    res
-      .json()
-      .then((res) => handleData(res))
-      .catch((err) => setErrors(err));
-  };
-
-  useEffect(() => fetchData(), []);
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch(
+        `https://data-marketcap-backend.herokuapp.com/datatoken/${did}`
+      );
+      res
+        .json()
+        .then((res) => handleData(res))
+        .catch((err) => setErrors(err));
+    };
+    fetchData();
+  }, [did]);
 
   return (
     <PageWrapper
@@ -74,6 +75,7 @@ export const Token = ({ did, ...props }) => {
         { name: 'right', start: [1, 1], end: [1, 1] },
       ]}
     >
+      {hasError && 'Has Error'}
       <Box gridArea="top" direction="row">
         <Box pad="medium" fill>
           <Text size="large"> Name: {tokenDetails.name}</Text>

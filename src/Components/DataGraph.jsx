@@ -4,14 +4,6 @@ import { ThemeContext } from 'grommet';
 
 export const DataGraph = ({ symbol, darkTheme }) => {
   const theme = useContext(ThemeContext);
-  console.log(theme);
-  const graphOptions = {
-    lineColor: '#F03A47',
-    bottomColor: '#5E080D',
-    topColor: '#F68D94',
-    lineWidth: 3,
-    title: `${symbol}/USD`,
-  };
 
   const options = {
     alignLabels: true,
@@ -63,25 +55,36 @@ export const DataGraph = ({ symbol, darkTheme }) => {
   const handleData = (res) =>
     res.prices.map((c) => ({ time: new Date(c[0]).toJSON(), value: c[1] }));
 
-  const fetchData = async () => {
-    // console.log('fetching new data');
-    const res = await fetch(
-      `https://api.coingecko.com/api/v3/coins/${symbol.toLowerCase()}/market_chart?vs_currency=usd&days=360&interval=daily`
-    );
-    res
-      .json()
-      .then((res) =>
-        setAreaSeries([
-          {
-            data: handleData(res),
-            options: graphOptions,
-          },
-        ])
-      )
-      .catch((err) => console.log(err));
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      // console.log('fetching new data');
 
-  useEffect(() => fetchData(), []);
+      const graphOptions = {
+        lineColor: '#F03A47',
+        bottomColor: '#5E080D',
+        topColor: '#F68D94',
+        lineWidth: 3,
+        title: `${symbol}/USD`,
+      };
+
+      const res = await fetch(
+        `https://api.coingecko.com/api/v3/coins/${symbol.toLowerCase()}/market_chart?vs_currency=usd&days=360&interval=daily`
+      );
+      res
+        .json()
+        .then((res) =>
+          setAreaSeries([
+            {
+              data: handleData(res),
+              options: graphOptions,
+            },
+          ])
+        )
+        .catch((err) => console.log(err));
+    };
+    fetchData();
+  }, [symbol]);
+
   return (
     <Chart
       options={options}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Rewind } from 'grommet-icons';
 import { A } from 'hookrouter';
 
-import { Anchor, Box, Heading, Grid, WorldMap } from 'grommet';
+import { Anchor, Box, Heading, WorldMap } from 'grommet';
 import { PageWrapper } from '../Components/PageWrapper';
 
 export const NotFound = () => (
@@ -28,7 +28,12 @@ export const NotFound = () => (
       <Heading level="2" margin={{ horizontal: 'none', vertical: 'large' }}>
         Lost?
       </Heading>
-      <Anchor as={A} icon={<Rewind />} label="Back to HomeOld Page" href="/dmc" />
+      <Anchor
+        as={A}
+        icon={<Rewind />}
+        label="Back to HomeOld Page"
+        href="/dmc"
+      />
     </Box>
   </PageWrapper>
 );

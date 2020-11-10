@@ -1,31 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { navigate } from 'hookrouter';
 
-import { Box, DataTable } from 'grommet';
-import { columns } from './data';
+import { Box, DataTable, Text, ThemeContext } from 'grommet';
+import { DataTableColumns } from './DataTableColumns';
 
-export const MyDataTable = (props) => {
-  const [tokenList, setTokenList] = useState([]);
-
-  const fetchData = async () => {
-    const res = await fetch(
-      `https://data-marketcap-backend.herokuapp.com/datatokens`
-    );
-    res
-      .json()
-      .then((res) => setTokenList(res))
-      .catch((err) => console.log(err));
-  };
-
-  useEffect(() => fetchData(), []);
+export const MyDataTable = ({ tokenList }) => {
+  const theme = useContext(ThemeContext);
 
   return (
     <Box align="center" pad={{ horizontal: 'none', vertical: 'small' }}>
+      <Text> Count filtered using Fuse JS: {tokenList.length}</Text>
       <DataTable
-        columns={columns.map((c) => ({
-          ...c,
-          search: c.property === 'name' || c.property === 'symbol',
-        }))}
+        columns={DataTableColumns}
         onClickRow={(e) => {
           navigate(`/dmc/token/${e.datum.did}`);
         }}
@@ -38,15 +24,13 @@ export const MyDataTable = (props) => {
             dark: 'neutral-1',
             light: 'neutral-3',
           },
-          body: [
-            { light: 'light-2', dark: 'dark-2' },
-            { light: 'light-3', dark: 'dark-3' },
-          ],
+          body: theme.dark ? ['dark-2', 'dark-3'] : ['light-2', 'light-3'],
           footer: {
             dark: 'dark-3',
             light: 'light-3',
           },
         }}
+        replace
         pin
         fill
         sortable

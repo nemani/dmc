@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Anchor, Box, Heading, Grid } from 'grommet';
+import { Box, Heading } from 'grommet';
 import { MyDataTable } from '../Components/DataTable';
 import { PageWrapper } from '../Components/PageWrapper';
 
-export const HomeOld = () => (
+export const HomeOld = ({ tokenList }) => (
   <PageWrapper
     rows={['full']}
     columns={['15%', '70%', '15%']}
@@ -12,7 +12,7 @@ export const HomeOld = () => (
   >
     <Box gridArea="middle">
       <Heading level="3">Top Data Tokens Today: </Heading>
-      <MyDataTable></MyDataTable>
+      <MyDataTable tokenList={tokenList}></MyDataTable>
     </Box>
   </PageWrapper>
 );
