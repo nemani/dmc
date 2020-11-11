@@ -1,23 +1,24 @@
-import React, { useState } from 'react';
-import { Box, Text, TextInput } from 'grommet';
-import * as Icons from 'grommet-icons'; // TODO: only import necessary icons
-import Fuse from 'fuse.js';
-
+import React, { useContext } from 'react';
+import { Box, Text } from 'grommet';
+import { navigate } from 'hookrouter';
 import Container from './Container';
+import { TokenContext } from '../App';
+import { amountFormatterTkn, amountFormatterUSD } from './DataTableColumns';
 
-// TODO: fetch this
-const stats = [
-  { name: 'Tokens', value: 145 },
-  { name: 'Markets', value: 54 },
-  { name: 'Market Cap', value: '$450,999,782,368' },
-  { name: '24h Vol', value: '$138,367,679,718' },
-];
+const Logo = () => (
+  <Box onClick={() => navigate(`/dmc`)}>
+    <Text size="large" weight={500}>
+      Data Market Cap
+    </Text>
+  </Box>
+);
 
-const Branding = () => (
+const PoweredBy = () => (
   <Box direction="row" gap="small" align="center">
+    <Text size="xsmall">powered by</Text>
     <svg
-      width="48"
-      height="48"
+      width="36"
+      height="36"
       viewBox="0 0 512 512"
       className="Logo-module--logo--fjl9p undefined"
     >
@@ -39,85 +40,51 @@ const Stat = ({ name, value }) => (
   </Box>
 );
 
-const Search = ({ onSearch }) => {
-  const [search, setSearch] = useState('');
-  // const handleKeyDown = (e) => onSearch(search);
+export const Navbar = ({ dark, setDark }) => {
+  const { stats: _stats } = useContext(TokenContext);
+  const stats = [
+    { name: 'Tokens', value: _stats.totalTokens },
+    {
+      name: 'OCEAN Price',
+      value: amountFormatterUSD.format(_stats.oceanPrice),
+    },
+    {
+      name: 'Market Cap',
+      value: `${amountFormatterUSD.format(
+        _stats.totalMarketCap
+      )} (${amountFormatterTkn(_stats.totalMarketCapInOcean, 'OCEAN')})`,
+    },
+  ];
 
   return (
-    <TextInput
-      placeholder="Search for tokens"
-      size="small"
-      style={{ padding: '5px', paddingLeft: '30px' }}
-      icon={<Icons.Search size="small" />}
-      value={search}
-      onChange={(e) => {
-        setSearch(e.target.value);
-        onSearch(search);
-      }}
-      // onKeyDown={handleKeyDown}
-    />
+    <>
+      <Box
+        tag="header"
+        pad={{ vertical: 'xsmall' }}
+        border={{ side: 'bottom', size: 'xsmall', color: 'light-3' }}
+      >
+        <Container>
+          <Box direction="row" align="center">
+            <Box direction="row" gap="small">
+              {stats.map((stat) => (
+                <Stat key={stat.name} name={stat.name} value={stat.value} />
+              ))}
+            </Box>
+          </Box>
+        </Container>
+      </Box>
+      <Box
+        tag="header"
+        pad={{ vertical: 'small' }}
+        border={{ side: 'bottom', size: 'xsmall', color: 'light-3' }}
+      >
+        <Container>
+          <Box direction="row" align="center" justify="between">
+            <Logo />
+            <PoweredBy />
+          </Box>
+        </Container>
+      </Box>
+    </>
   );
 };
-
-export const Navbar = ({ dark, setDark, setFilteredTokenList, tokenList }) => (
-  <>
-    <Box
-      tag="header"
-      pad={{ vertical: 'xsmall' }}
-      border={{ side: 'bottom', size: 'xsmall', color: 'light-3' }}
-    >
-      <Container>
-        <Box direction="row" align="center">
-          <Box direction="row" gap="small">
-            {stats.map((stat) => (
-              <Stat key={stat.name} name={stat.name} value={stat.value} />
-            ))}
-          </Box>
-        </Box>
-      </Container>
-    </Box>
-    <Box
-      tag="header"
-      pad={{ vertical: 'small' }}
-      border={{ side: 'bottom', size: 'xsmall', color: 'light-3' }}
-    >
-      <Container>
-        <Box direction="row" align="center" justify="between">
-          <Branding />
-          <Text weight="bold" size="large">
-            Token Market Cap
-          </Text>
-          <Box width="small">
-            <Search
-              onSearch={(search) => {
-                if (search === '') {
-                  return tokenList;
-                }
-                const options = {
-                  includeScore: true,
-                  keys: ['did', 'name', 'symbol', 'tags'],
-                };
-                const fuse = new Fuse(tokenList, options);
-                const filteredTokenList = fuse.search(search);
-
-                // filteredTokenList = [ {item: {did,name,symbol...}, refIndex, score}}]
-                // map to get array of items
-                // console.log(filteredTokenList);
-                setFilteredTokenList(
-                  // TODO: Remove hardcoded tags from below when bishnoi adds to API
-                  // Remove this entire map function
-                  filteredTokenList.map((x) => {
-                    return {
-                      tags: ['hardcoded', 'tags', 'remove', 'TODO'],
-                      ...x.item,
-                    };
-                  })
-                );
-              }}
-            />
-          </Box>
-        </Box>
-      </Container>
-    </Box>
-  </>
-);

@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Container from '../Components/Container';
-import { Box, Heading, Text } from 'grommet';
+import { Box, Text } from 'grommet';
 import * as Icons from 'grommet-icons'; // TODO: only import necessary icons
+import { TokenContext } from '../App';
+import { amountFormatterUSD } from '../Components/DataTableColumns';
+
+import DataTable from '../Components/DataTable';
 
 const PercentChange = ({ value, postfix }) => (
   <Box
@@ -33,17 +37,23 @@ PercentChange.defaultProps = {
 };
 
 const Home = () => {
+  const { stats } = useContext(TokenContext);
+
   return (
-    <Container margin={{ vertical: 'medium' }}>
-      <Heading level={3} margin={{ vertical: 'small' }}>
+    <Container margin={{ vertical: 'large' }}>
+      <Text size="large" margin={{ vertical: 'small' }} weight="bold">
         Today's Token Prices by Market Cap
-      </Heading>
+      </Text>
       <Box direction="row" gap="xxsmall">
         <Text size="small">
-          The global OCEAN market cap is <strong>$450.63B</strong>, a
+          The global OCEAN market cap is{' '}
+          <strong>{amountFormatterUSD.format(stats.totalMarketCap)}</strong>, a
         </Text>
         <PercentChange value={9.8} postfix="%" />
         <Text size="small">change over the last day.</Text>
+      </Box>
+      <Box margin={{ bottom: 'large', top: 'medium' }}>
+        <DataTable />
       </Box>
     </Container>
   );
