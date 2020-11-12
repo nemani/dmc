@@ -88,7 +88,7 @@ export const Token = ({ did, ...props }) => {
               </Text>
             </Box>
 
-            <Box>
+            <Box gap="xsmall">
               <TokenDetail
                 icon={<Icons.User size="small" />}
                 value={tokenDetails.author}
@@ -108,9 +108,14 @@ export const Token = ({ did, ...props }) => {
               />
             </Box>
 
-            <Box border={{ color: 'light-3', size: 'small', side: 'bottom' }} />
+            {/* <Box border={{ color: 'light-3', size: 'small', side: 'bottom' }} /> */}
 
-            <Box>
+            <Box
+              background="light-2"
+              elevation="small"
+              pad={{ vertical: 'small', horizontal: 'medium' }}
+              // border={{ color: 'light-3', size: 'small' }}
+            >
               <Text size="large" weight="bold">
                 Description
               </Text>
@@ -127,7 +132,7 @@ export const Token = ({ did, ...props }) => {
           </Box>
 
           <Box gap="medium" flex="grow">
-            <Box direction="row" gap="medium">
+            <Box direction="row" gap="medium" alignSelf="stretch">
               <Box direction="row" gap="xsmall" align="baseline">
                 <Text size="large">
                   {amountFormatterUSD.format(tokenDetails.price)}
@@ -146,7 +151,7 @@ export const Token = ({ did, ...props }) => {
               </Box>
             </Box>
 
-            <Box align="start">
+            <Box align="start" alignSelf="stretch">
               <Table>
                 <TableHeader>
                   <TableRow>
