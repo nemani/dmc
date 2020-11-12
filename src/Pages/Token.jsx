@@ -1,7 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, Heading, Paragraph } from 'grommet';
+import {
+  Box,
+  Text,
+  Heading,
+  Paragraph,
+  Anchor,
+  Markdown,
+  Table,
+  TableHeader,
+  TableRow,
+  TableCell,
+  TableBody,
+} from 'grommet';
 import { DataGraph } from '../Components/DataGraph';
-import { PageWrapper } from '../Components/PageWrapper';
+import Container from '../Components/Container';
+import {
+  amountFormatterTkn,
+  amountFormatterUSD,
+} from '../Components/DataTableColumns';
+import * as Icons from 'grommet-icons';
 
 export const getRandomColor = () => {
   const letters = '0123456789ABCDEF';
@@ -12,103 +29,169 @@ export const getRandomColor = () => {
   return color;
 };
 
-const convertCase = (str) => {
-  str = str.replace(/([A-Z]+)/g, ' $1');
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
+const TokenDetail = ({ icon, value, href }) => (
+  <Box direction="row" gap="small" align="center">
+    {icon}
+    {href ? (
+      <Anchor href={href} size="small" target="_blank">
+        {value}
+      </Anchor>
+    ) : (
+      <Text size="small" truncate>
+        {value}
+      </Text>
+    )}
+  </Box>
+);
 
 export const Token = ({ did, ...props }) => {
-  const [tokenDetails, setTokenDetails] = useState({
-    symbol: 'LOAD',
-    name: 'loading',
-    price: 0,
-    description: 'Please wait while the description is being loaded !',
-    priceOcean: 0,
-    otherDetails: [{ color: 'white', dataKey: 'state', dataValue: 'loading' }],
-  });
-
+  const [tokenDetails, setTokenDetails] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const [hasError, setErrors] = useState(false);
 
-  const handleData = (res) => {
-    let { name, symbol, price, description, priceOcean, ...otherDetails } = res;
-
-    otherDetails = Object.entries(otherDetails).map(
-      ([dataKey, dataValue], index, arr) => {
-        return {
-          color: getRandomColor(),
-          dataKey,
-          dataValue,
-        };
-      }
-    );
-
-    setTokenDetails({
-      name,
-      symbol,
-      price,
-      description,
-      priceOcean,
-      otherDetails,
-    });
-  };
+  const handleData = (res) => setTokenDetails(res);
+  console.log('tokenDetails:', tokenDetails);
 
   useEffect(() => {
-    const fetchData = async () => {
+    (async () => {
       const res = await fetch(
         `https://data-marketcap-backend.herokuapp.com/datatoken/${did}`
       );
       res
         .json()
         .then((res) => handleData(res))
+        .then(() => setIsLoading(false))
         .catch((err) => setErrors(err));
-    };
-    fetchData();
+    })();
   }, [did]);
 
   return (
-    <PageWrapper
-      rows={['10%', '90%']}
-      columns={['70%', '30%']}
-      areas={[
-        { name: 'top', start: [0, 0], end: [1, 0] },
-        { name: 'left', start: [0, 1], end: [0, 1] },
-        { name: 'right', start: [1, 1], end: [1, 1] },
-      ]}
-    >
-      {hasError && 'Has Error'}
-      <Box gridArea="top" direction="row">
-        <Box pad="medium" fill>
-          <Text size="large"> Name: {tokenDetails.name}</Text>
-        </Box>
-        <Box pad="medium" fill>
-          <Text size="large"> Symbol: {tokenDetails.symbol}</Text>
-        </Box>
-        <Box pad="medium" fill>
-          <Text size="large">Price: {tokenDetails.price} USD</Text>
-        </Box>
-        <Box pad="medium" fill>
-          <Text size="large"> Price: {tokenDetails.priceOcean} Ocean</Text>
-        </Box>
-      </Box>
-      <Box gridArea="left" fill>
-        <DataGraph symbol="bitcoin" />
-        <Box pad="medium" fill>
-          <Heading pad="small" margin="none" level="4">
-            Description
-          </Heading>
-          <Paragraph fill>{tokenDetails.description}</Paragraph>
-        </Box>
-      </Box>
-      <Box gridArea="right">
-        {tokenDetails.otherDetails.map((property) => (
-          <Box pad="small" border="small" key={property.dataKey} fill>
-            <Heading margin="none" pad="small" level="4">
-              {convertCase(property.dataKey)}
-            </Heading>
-            <Text size="medium">{property.dataValue}</Text>
+    <Container margin={{ vertical: 'large' }}>
+      {isLoading ? (
+        <Text size="small">Loading...</Text>
+      ) : hasError ? (
+        <Text size="small">Error</Text>
+      ) : (
+        <Box direction="row" margin={{ vertical: 'small' }} gap="large">
+          <Box gap="medium">
+            <Box direction="row" gap="xsmall" align="baseline" width="500px">
+              <Text size="large" weight="bold">
+                {tokenDetails.name}
+              </Text>
+              <Text color="dark-6" size="small" weight="bold">
+                ({tokenDetails.symbol})
+              </Text>
+            </Box>
+
+            <Box>
+              <TokenDetail
+                icon={<Icons.User size="small" />}
+                value={tokenDetails.author}
+              />
+              <TokenDetail
+                icon={<Icons.Clock size="small" />}
+                value={new Date(tokenDetails.createdAt).toLocaleString()}
+              />
+              <TokenDetail
+                icon={<Icons.Host size="small" />}
+                value={tokenDetails.datasetName}
+              />
+              <TokenDetail
+                icon={<Icons.Map size="small" />}
+                href={`https://etherscan.io/address/${tokenDetails.address}`}
+                value={tokenDetails.address}
+              />
+            </Box>
+
+            <Box border={{ color: 'light-3', size: 'small', side: 'bottom' }} />
+
+            <Box>
+              <Text size="large" weight="bold">
+                Description
+              </Text>
+              <Markdown
+                components={{
+                  p: {
+                    props: { size: 'small' },
+                  },
+                }}
+              >
+                {tokenDetails.description}
+              </Markdown>
+            </Box>
           </Box>
-        ))}
-      </Box>
-    </PageWrapper>
+
+          <Box gap="medium" flex="grow">
+            <Box direction="row" gap="medium">
+              <Box direction="row" gap="xsmall" align="baseline">
+                <Text size="large">
+                  {amountFormatterUSD.format(tokenDetails.price)}
+                </Text>
+                <Text color="dark-6" size="small">
+                  (USD)
+                </Text>
+              </Box>
+              <Box direction="row" gap="xsmall" align="baseline">
+                <Text size="large">
+                  {amountFormatterTkn(tokenDetails.priceOcean, '')}
+                </Text>
+                <Text color="dark-6" size="small">
+                  OCEAN
+                </Text>
+              </Box>
+            </Box>
+
+            <Box align="start">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableCell scope="col" border="bottom">
+                      <Text size="small" color="dark-6" weight="bold">
+                        Market Cap
+                      </Text>
+                    </TableCell>
+                    <TableCell scope="col" border="bottom">
+                      <Text size="small" color="dark-6" weight="bold">
+                        Circulating Supply
+                      </Text>
+                    </TableCell>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell scope="row">
+                      <Box gap="xsmall">
+                        <Text weight="bold">
+                          {amountFormatterUSD.format(tokenDetails.marketCap)}
+                        </Text>
+                        <Text size="small" color="dark-6">
+                          {amountFormatterTkn(
+                            tokenDetails.marketCap *
+                              (tokenDetails.price / tokenDetails.priceOcean),
+                            'OCEAN'
+                          )}
+                        </Text>
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Text>
+                        {amountFormatterTkn(
+                          tokenDetails.circulatingSupply,
+                          tokenDetails.symbol
+                        )}
+                      </Text>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Box>
+
+            <Box>
+              <DataGraph symbol="bitcoin" />
+            </Box>
+          </Box>
+        </Box>
+      )}
+    </Container>
   );
 };

@@ -13,19 +13,19 @@ export const DataGraph = ({ symbol, darkTheme }) => {
       autoScale: true,
     },
     layout: {
-      backgroundColor: theme.dark ? '#3E5C76' : '#FBC2FF',
+      backgroundColor: theme.global.colors['light-1'],
       textColor: theme.dark ? '#FBC2FF' : '#3E5C76',
       fontSize: 12,
       fontFamily: 'Calibri',
     },
     grid: {
       vertLines: {
-        color: '#F03A47',
+        color: theme.global.colors.brand,
         style: 1,
         visible: true,
       },
       horzLines: {
-        color: '#F03A47',
+        color: theme.global.colors.brand,
         style: 1,
         visible: true,
       },
@@ -60,8 +60,8 @@ export const DataGraph = ({ symbol, darkTheme }) => {
       // console.log('fetching new data');
 
       const graphOptions = {
-        lineColor: '#F03A47',
-        bottomColor: '#5E080D',
+        lineColor: '#EF8275',
+        bottomColor: '#54414E',
         topColor: '#F68D94',
         lineWidth: 3,
         title: `${symbol}/USD`,

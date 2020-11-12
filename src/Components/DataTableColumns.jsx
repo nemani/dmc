@@ -58,13 +58,13 @@ export const dataTableColumns = [
       color: 'dark-6',
     }),
     align: 'end',
-    render: ({ volume, price, symbol }) => (
+    render: ({ volume, price, symbol, circulatingSupply }) => (
       <Box gap="xxsmall">
         <Text size="small" weight="bold">
           {amountFormatterUSD.format(volume)}
         </Text>
         <Text size="xsmall" color="dark-6" weight={500}>
-          {amountFormatterTkn(price !== 0 ? volume / price : 0, symbol)}
+          {amountFormatterTkn(circulatingSupply, symbol)}
         </Text>
       </Box>
     ),

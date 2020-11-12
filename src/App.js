@@ -61,7 +61,7 @@ const App = () => {
 
   return (
     <Grommet theme={grommet} cssVars full themeMode={dark ? 'dark' : 'light'}>
-      {allTokenList.length > 0 ? (
+      {allTokenList.length > 0 || true ? (
         <TokenContext.Provider value={{ allTokenList, stats }}>
           <Navbar dark={dark} setDark={setDark} />
           <Box background="light-1">{match || <NotFound />}</Box>
