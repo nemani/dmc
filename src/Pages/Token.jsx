@@ -73,8 +73,13 @@ export const Token = ({ did, ...props }) => {
         <Text size="small">Error</Text>
       ) : (
         <Box direction="row" margin={{ vertical: 'small' }} gap="large">
-          <Box gap="medium">
-            <Box direction="row" gap="xsmall" align="baseline" width="500px">
+          <Box gap="medium" width={{ max: '500px', min: '500px' }}>
+            <Box
+              direction="row"
+              gap="xsmall"
+              align="baseline"
+              width={{ max: '500px', min: '500px' }}
+            >
               <Text size="large" weight="bold">
                 {tokenDetails.name}
               </Text>

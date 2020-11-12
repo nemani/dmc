@@ -112,12 +112,12 @@ const DataTable = () => {
         .map((_) => _.item);
     }
 
-    for (let filterIndex in filters) {
-      const { low, high, property } = filters[filterIndex];
-      filteredTokenList = filteredTokenList.filter(
-        (item) => item[property] >= low && item[property] <= high
-      );
-    }
+    // for (let filterIndex in filters) {
+    //   const { low, high, property } = filters[filterIndex];
+    //   filteredTokenList = filteredTokenList.filter(
+    //     (item) => item[property] >= low && item[property] <= high
+    //   );
+    // }
 
     setTokenList(filteredTokenList);
     setPageNumber(1);
