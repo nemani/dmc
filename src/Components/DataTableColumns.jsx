@@ -53,18 +53,18 @@ export const dataTableColumns = [
   },
   {
     property: 'volume',
-    header: wrapTextComponent('Volume (Token)', {
+    header: wrapTextComponent('Volume (24h)', {
       weight: 'bold',
       color: 'dark-6',
     }),
     align: 'end',
-    render: ({ volume, price, symbol, circulatingSupply }) => (
+    render: ({ volume, price, symbol }) => (
       <Box gap="xxsmall">
         <Text size="small" weight="bold">
           {amountFormatterUSD.format(volume)}
         </Text>
         <Text size="xsmall" color="dark-6" weight={500}>
-          {amountFormatterTkn(circulatingSupply, symbol)}
+          {amountFormatterTkn(volume / price, symbol)}
         </Text>
       </Box>
     ),
@@ -76,8 +76,8 @@ export const dataTableColumns = [
       color: 'dark-6',
     }),
     align: 'end',
-    render: (datum) =>
-      wrapTextComponent(Math.round(datum.circulatingSupply * 100) / 100),
+    render: ({ circulatingSupply, symbol }) =>
+      wrapTextComponent(amountFormatterTkn(circulatingSupply, symbol)),
   },
   {
     property: 'Tags',
