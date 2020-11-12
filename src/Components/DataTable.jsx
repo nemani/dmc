@@ -70,10 +70,6 @@ const DataTable = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [reachedEnd, setReachedEnd] = useState(tokenList.length <= 20);
 
-  useEffect(() => {
-    window.Fuse = Fuse;
-  }, []);
-
   const handlePageChange = (newPageNumber) => {
     let start = 20 * (newPageNumber - 1);
     let end = 20 * newPageNumber;

@@ -1,4 +1,5 @@
 import { Box, Text } from 'grommet';
+import { Tag } from './Tag';
 
 export const amountFormatterUSD = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -77,5 +78,23 @@ export const dataTableColumns = [
     align: 'end',
     render: (datum) =>
       wrapTextComponent(Math.round(datum.circulatingSupply * 100) / 100),
+  },
+  {
+    property: 'Tags',
+    header: wrapTextComponent('Tags', {
+      weight: 'bold',
+      color: 'dark-6',
+    }),
+    align: 'end',
+    render: (datum) => {
+      const tags = datum.tags
+        .slice(0, 2)
+        .map((x) => <Tag key={x} children={x} />);
+      const left = datum.tags.length - 2;
+      if (left > 0) {
+        tags.push(<Tag key={left} children={`and ${left} others`} />);
+      }
+      return tags;
+    },
   },
 ];

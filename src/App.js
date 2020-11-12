@@ -35,15 +35,22 @@ const App = () => {
     res
       .json()
       .then((res) => {
-        setAllTokenList(_(res).orderBy('marketCap', 'desc').value());
-
-        const totalMarketCap = _(res).sumBy((_) => _.marketCap);
-        const oceanPrice = 0.609;
-        setStats({
-          totalTokens: res.length,
-          totalMarketCap,
+        setAllTokenList(_(res[0]).orderBy('marketCap', 'desc').value());
+        const {
+          dataTokensMarketCap,
+          dataTokensVolume,
+          oceanMarketCap,
           oceanPrice,
-          totalMarketCapInOcean: totalMarketCap / oceanPrice,
+        } = res[1];
+
+        setStats({
+          totalTokens: res[0].length,
+          oceanPrice,
+          oceanMarketCap,
+          dataTokensVolume,
+          dataTokensVolumeInOcean: dataTokensVolume / oceanPrice,
+          totalMarketCap: dataTokensMarketCap,
+          totalMarketCapInOcean: dataTokensMarketCap / oceanPrice,
         });
       })
       .catch((err) => console.log(err));

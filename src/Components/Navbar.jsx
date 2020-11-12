@@ -49,7 +49,17 @@ export const Navbar = ({ dark, setDark }) => {
       value: amountFormatterUSD.format(_stats.oceanPrice),
     },
     {
-      name: 'Market Cap',
+      name: 'OCEAN Market Cap',
+      value: amountFormatterUSD.format(_stats.oceanMarketCap),
+    },
+    {
+      name: 'Tokens Volume (24h)',
+      value: `${amountFormatterUSD.format(
+        _stats.dataTokensVolumeInOcean
+      )} (${amountFormatterTkn(_stats.dataTokensVolumeInOcean, 'OCEAN')})`,
+    },
+    {
+      name: 'Tokens Market Cap',
       value: `${amountFormatterUSD.format(
         _stats.totalMarketCap
       )} (${amountFormatterTkn(_stats.totalMarketCapInOcean, 'OCEAN')})`,
