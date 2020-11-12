@@ -92,7 +92,7 @@ export const dataTableColumns = [
         .map((x) => <Tag key={x} children={x} />);
       const left = datum.tags.length - 2;
       if (left > 0) {
-        tags.push(<Tag key={left} children={`and ${left} others`} />);
+        tags.push(<Tag key={left} children={`+${left}`} />);
       }
       return tags;
     },
