@@ -114,10 +114,11 @@ export const Token = ({ did, ...props }) => {
               background="light-2"
               elevation="small"
               pad={{ vertical: 'small', horizontal: 'medium' }}
+              gap="small"
               // border={{ color: 'light-3', size: 'small' }}
             >
               <Text size="large" weight="bold">
-                Description
+                {tokenDetails.datasetName}
               </Text>
               <Markdown
                 components={{
