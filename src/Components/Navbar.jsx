@@ -1,21 +1,21 @@
 import React, { useContext } from 'react';
-import { Box, Text } from 'grommet';
+import { Box, ResponsiveContext, Text } from 'grommet';
 import { navigate } from 'hookrouter';
 import Container from './Container';
 import { TokenContext } from '../App';
 import { amountFormatterTkn, amountFormatterUSD } from './DataTableColumns';
 
-const Logo = () => (
+const Logo = ({ size }) => (
   <Box onClick={() => navigate(`/dmc`)}>
     <Text size="large" weight={500}>
-      Data Market Cap
+      {size !== 'small' ? 'Data Market Cap' : 'DMC'}
     </Text>
   </Box>
 );
 
-const PoweredBy = () => (
+const PoweredBy = ({ size }) => (
   <Box direction="row" gap="small" align="center">
-    <Text size="xsmall">powered by</Text>
+    {size !== 'small' && <Text size="xsmall">powered by</Text>}
     <svg
       width="36"
       height="36"
@@ -33,8 +33,10 @@ const PoweredBy = () => (
 
 const Stat = ({ name, value }) => (
   <Box direction="row" gap="xxsmall">
-    <Text size="xsmall">{name}:</Text>
-    <Text size="xsmall" color="brand" weight={500}>
+    <Text size="xsmall" truncate>
+      {name}:
+    </Text>
+    <Text size="xsmall" color="brand" weight={500} truncate>
       {value}
     </Text>
   </Box>
@@ -67,34 +69,44 @@ export const Navbar = ({ dark, setDark }) => {
   ];
 
   return (
-    <>
-      <Box
-        tag="header"
-        pad={{ vertical: 'xsmall' }}
-        border={{ side: 'bottom', size: 'xsmall', color: 'light-3' }}
-      >
-        <Container>
-          <Box direction="row" align="center">
-            <Box direction="row" gap="small">
-              {stats.map((stat) => (
-                <Stat key={stat.name} name={stat.name} value={stat.value} />
-              ))}
-            </Box>
+    <ResponsiveContext.Consumer>
+      {(size) => (
+        <>
+          <Box
+            tag="header"
+            pad={{ vertical: 'xsmall' }}
+            border={{ side: 'bottom', size: 'xsmall', color: 'light-3' }}
+          >
+            <Container>
+              <Box direction="row" align="center" overflow="scroll">
+                <Box direction="row" gap="small">
+                  {stats.map((stat) => (
+                    <Box flex="grow">
+                      <Stat
+                        key={stat.name}
+                        name={stat.name}
+                        value={stat.value}
+                      />
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+            </Container>
           </Box>
-        </Container>
-      </Box>
-      <Box
-        tag="header"
-        pad={{ vertical: 'small' }}
-        border={{ side: 'bottom', size: 'xsmall', color: 'light-3' }}
-      >
-        <Container>
-          <Box direction="row" align="center" justify="between">
-            <Logo />
-            <PoweredBy />
+          <Box
+            tag="header"
+            pad={{ vertical: 'small' }}
+            border={{ side: 'bottom', size: 'xsmall', color: 'light-3' }}
+          >
+            <Container>
+              <Box direction="row" align="center" justify="between">
+                <Logo size={size} />
+                <PoweredBy size={size} />
+              </Box>
+            </Container>
           </Box>
-        </Container>
-      </Box>
-    </>
+        </>
+      )}
+    </ResponsiveContext.Consumer>
   );
 };

@@ -11,7 +11,11 @@ const Container = ({ children, ...rest }) => {
               {children}
             </Box>
           ) : (
-            <Box margin={{ horizontal: 'xlarge' }}>{children}</Box>
+            <Box
+              margin={{ horizontal: size !== 'small' ? 'xlarge' : 'medium' }}
+            >
+              {children}
+            </Box>
           )
         }
       </ResponsiveContext.Consumer>

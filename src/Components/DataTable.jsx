@@ -133,10 +133,10 @@ const DataTable = () => {
         onPageChange={handlePageChange}
         onSearch={handleSearch}
       />
-      <Box align="center">
+      <Box overflow="scroll">
         <GrommetDataTable
-          pin
           fill
+          pin
           sortable
           columns={dataTableColumns}
           data={pagedTokenList}

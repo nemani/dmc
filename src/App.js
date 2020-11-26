@@ -56,7 +56,6 @@ const App = () => {
       .catch((err) => console.log(err));
   };
 
-  console.log(stats);
   useEffect(() => fetchData(), []);
 
   return (
