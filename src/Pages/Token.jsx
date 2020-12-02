@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Box,
   Text,
-  Heading,
-  Paragraph,
   Anchor,
   Markdown,
   Table,

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { navigate } from 'hookrouter';
 import _ from 'lodash';
 import * as Icons from 'grommet-icons';
@@ -65,9 +65,9 @@ const DataTableHeader = ({
 
 const DataTable = () => {
   const { allTokenList } = useContext(TokenContext);
-  const [filters, setFilters] = useState([
-    { low: 0, high: 10, property: 'price' },
-  ]);
+  // const [filters, setFilters] = useState([
+  //   { low: 0, high: 10, property: 'price' },
+  // ]);
   const [tokenList, setTokenList] = useState(allTokenList);
   const [pagedTokenList, setPagedTokenList] = useState(tokenList.slice(0, 20));
   const [pageNumber, setPageNumber] = useState(1);
