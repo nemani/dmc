@@ -3,7 +3,10 @@ import Container from '../Components/Container';
 import { Box, ResponsiveContext, Text } from 'grommet';
 import * as Icons from 'grommet-icons'; // TODO: only import necessary icons
 import { TokenContext } from '../App';
-import { amountFormatterUSD } from '../Components/DataTableColumns';
+import {
+  amountFormatterTkn,
+  amountFormatterUSD,
+} from '../Components/DataTableColumns';
 
 import DataTable from '../Components/DataTable';
 
@@ -50,10 +53,16 @@ const Home = () => {
           </Text>
           <Box direction="row" gap="xxsmall">
             <Text size="small">
-              The global OCEAN market cap is{' '}
-              <strong>{amountFormatterUSD.format(stats.totalMarketCap)}</strong>
-              , a <PercentChange value={9.8} postfix="%" /> change over the last
-              day.
+              The global Datatokens market cap is{' '}
+              <strong>
+                {amountFormatterUSD.format(stats.totalMarketCap)} (
+                {amountFormatterTkn(stats.totalMarketCapInOcean, 'OCEAN')})
+              </strong>
+              , and total OCEANs in liquidity pools is{' '}
+              <strong>
+                {amountFormatterTkn(stats.totalLiquidityOcean, 'OCEAN')}
+              </strong>
+              .
             </Text>
           </Box>
           <Box

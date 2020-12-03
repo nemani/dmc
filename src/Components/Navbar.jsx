@@ -3,7 +3,7 @@ import { Box, ResponsiveContext, Text } from 'grommet';
 import { navigate } from 'hookrouter';
 import Container from './Container';
 import { TokenContext } from '../App';
-import { amountFormatterTkn, amountFormatterUSD } from './DataTableColumns';
+import { amountFormatterUSD } from './DataTableColumns';
 
 const Logo = ({ size }) => (
   <Box onClick={() => navigate(`/dmc`)}>
@@ -55,16 +55,8 @@ export const Navbar = ({ dark, setDark }) => {
       value: amountFormatterUSD.format(_stats.oceanMarketCap),
     },
     {
-      name: 'Tokens Volume (24h)',
-      value: `${amountFormatterUSD.format(
-        _stats.dataTokensVolumeInOcean
-      )} (${amountFormatterTkn(_stats.dataTokensVolumeInOcean, 'OCEAN')})`,
-    },
-    {
-      name: 'Tokens Market Cap',
-      value: `${amountFormatterUSD.format(
-        _stats.totalMarketCap
-      )} (${amountFormatterTkn(_stats.totalMarketCapInOcean, 'OCEAN')})`,
+      name: 'Total Datatokens Liquidity', // (in data tokens)
+      value: amountFormatterUSD.format(_stats.dataTokensLiquidity),
     },
   ];
 

@@ -139,7 +139,12 @@ const TokenPrice = ({ tokenDetails }) => {
               </TableCell>
               <TableCell scope="col" border="bottom">
                 <Text size="small" color="dark-6" weight="bold">
-                  Circulating Supply
+                  OCEAN Liquidity
+                </Text>
+              </TableCell>
+              <TableCell scope="col" border="bottom">
+                <Text size="small" color="dark-6" weight="bold">
+                  Fully Diluted Market Cap
                 </Text>
               </TableCell>
             </TableRow>
@@ -160,19 +165,60 @@ const TokenPrice = ({ tokenDetails }) => {
                   </Text>
                 </Box>
               </TableCell>
-              <TableCell>
-                <Text>
-                  {amountFormatterTkn(
-                    tokenDetails.circulatingSupply,
-                    tokenDetails.symbol
-                  )}
-                </Text>
+              <TableCell scope="row">
+                <Box gap="xsmall">
+                  <Text weight="bold">
+                    {amountFormatterUSD.format(
+                      tokenDetails.liquidityOcean * tokenDetails.priceOcean
+                    )}
+                  </Text>
+                  <Text size="small" color="dark-6">
+                    {amountFormatterTkn(tokenDetails.liquidityOcean, 'OCEAN')}
+                  </Text>
+                </Box>
+              </TableCell>
+              <TableCell scope="row">
+                <Box gap="xsmall">
+                  <Text weight="bold">
+                    {amountFormatterUSD.format(
+                      tokenDetails.fullyDilutedValuation
+                    )}
+                  </Text>
+                  <Text size="small" color="dark-6">
+                    {amountFormatterTkn(
+                      tokenDetails.fullyDilutedValuation /
+                        tokenDetails.priceOcean,
+                      'OCEAN'
+                    )}
+                  </Text>
+                </Box>
               </TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </Box>
-      <DataGraph symbol="bitcoin" />
+      <Box align="start" alignSelf="stretch">
+        <Box direction="row" gap="xsmall">
+          <Text size="small" color="dark-6" weight="bold">
+            Circlulating Supply:
+          </Text>
+          <Text weight="bold" size="small">
+            {amountFormatterTkn(tokenDetails.circulatingSupply, '')}
+          </Text>
+        </Box>
+        <Box direction="row" gap="small">
+          <Text size="small" color="dark-6" weight="bold">
+            Max Supply:
+          </Text>
+          <Text weight="bold" size="small">
+            {amountFormatterTkn(tokenDetails.maxSupply, '')}
+          </Text>
+        </Box>
+      </Box>
+      <DataGraph
+        symbol={tokenDetails.symbol}
+        priceHistory={tokenDetails.priceHistory}
+      />
     </Box>
   );
 };
@@ -183,22 +229,21 @@ export const Token = ({ did, ...props }) => {
   const [hasError, setErrors] = useState(false);
 
   const handleData = (res) => setTokenDetails(res);
-  console.log('tokenDetails:', tokenDetails);
 
   useEffect(() => {
-    (async () => {
-      const res = await fetch(
-        `https://data-marketcap-backend.herokuapp.com/datatoken/${did}`
-      );
+    const DATATOKEN_ENDPOINT_URL = `https://data-marketcap-backend.herokuapp.com/datatoken/${did}`;
+    // const DATATOKEN_ENDPOINT_URL = `http://127.0.0.1:5000/datatoken/${did}`;
+
+    const fetchData = async () => {
+      const res = await fetch(DATATOKEN_ENDPOINT_URL);
       res
         .json()
         .then((res) => handleData(res))
         .then(() => setIsLoading(false))
         .catch((err) => setErrors(err));
-    })();
+    };
+    fetchData();
   }, [did]);
-
-  console.log(tokenDetails);
 
   return (
     <Container margin={{ vertical: 'large' }}>

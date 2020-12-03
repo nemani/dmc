@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import Chart from 'kaktana-react-lightweight-charts';
 import { ThemeContext } from 'grommet';
 
-export const DataGraph = ({ symbol, darkTheme }) => {
+export const DataGraph = ({ symbol, priceHistory, darkTheme }) => {
   const theme = useContext(ThemeContext);
 
   const options = {
@@ -44,53 +44,44 @@ export const DataGraph = ({ symbol, darkTheme }) => {
       fixLeftEdge: true,
       lockVisibleTimeRangeOnResize: true,
       rightBarStaysOnScroll: true,
-
       //   timeVisible: true,
       //   secondsVisible: false,
     },
   };
 
-  const [areaSeries, setAreaSeries] = useState();
+  const handleData = (priceHistory) =>
+    priceHistory.map((c) => ({
+      time: new Date(c[1] * 1000).toJSON(),
+      value: c[0],
+    }));
 
-  const handleData = (res) =>
-    res.prices.map((c) => ({ time: new Date(c[0]).toJSON(), value: c[1] }));
-
-  useEffect(() => {
-    const fetchData = async () => {
-      // console.log('fetching new data');
-
-      const graphOptions = {
-        lineColor: '#EF8275',
-        bottomColor: '#54414E',
-        topColor: '#F68D94',
-        lineWidth: 3,
-        title: `${symbol}/USD`,
-      };
-
-      const res = await fetch(
-        `https://api.coingecko.com/api/v3/coins/${symbol.toLowerCase()}/market_chart?vs_currency=usd&days=360&interval=daily`
-      );
-      res
-        .json()
-        .then((res) =>
-          setAreaSeries([
-            {
-              data: handleData(res),
-              options: graphOptions,
-            },
-          ])
-        )
-        .catch((err) => console.log(err));
-    };
-    fetchData();
-  }, [symbol]);
+  const graphOptions = {
+    lineColor: 'rgba(76, 175, 80, 1)',
+    bottomColor: 'rgba(76, 175, 80, 0.04)',
+    topColor: 'rgba(76, 175, 80, 0.56)',
+    lineWidth: 3,
+    title: `${symbol}/OCEAN`,
+  };
 
   return (
-    <Chart
-      options={options}
-      areaSeries={areaSeries}
-      autoWidth
-      darkTheme={darkTheme}
-    />
+    priceHistory?.length > 0 && (
+      <Chart
+        options={options}
+        from={new Date(priceHistory[0][1] * 1000).toJSON()}
+        to={new Date(priceHistory[priceHistory.length - 1][1] * 1000).toJSON()}
+        areaSeries={[
+          {
+            data: handleData(priceHistory),
+            options: graphOptions,
+          },
+        ]}
+        autoWidth
+        darkTheme={darkTheme}
+      />
+    )
   );
+};
+
+DataGraph.defaultProps = {
+  priceHistory: [],
 };

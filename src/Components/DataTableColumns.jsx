@@ -52,19 +52,19 @@ export const dataTableColumns = [
     align: 'end',
   },
   {
-    property: 'volume',
-    header: wrapTextComponent('Volume (24h)', {
+    property: 'liquidityOcean',
+    header: wrapTextComponent('OCEAN Liquidity', {
       weight: 'bold',
       color: 'dark-6',
     }),
     align: 'end',
-    render: ({ volume, price, symbol }) => (
+    render: ({ liquidityOcean, price }) => (
       <Box gap="xxsmall">
         <Text size="small" weight="bold">
-          {amountFormatterUSD.format(volume)}
+          {amountFormatterTkn(liquidityOcean, 'OCEAN')}
         </Text>
         <Text size="xsmall" color="dark-6" weight={500}>
-          {amountFormatterTkn(volume / price, symbol)}
+          {amountFormatterUSD.format(liquidityOcean * price)}
         </Text>
       </Box>
     ),

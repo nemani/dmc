@@ -28,35 +28,38 @@ const App = () => {
   const [dark, setDark] = useState(false);
   const match = useRoutes(routes);
 
-  const fetchData = async () => {
-    const res = await fetch(
-      `https://data-marketcap-backend.herokuapp.com/datatokens`
-    );
-    res
-      .json()
-      .then((res) => {
-        setAllTokenList(_(res[0]).orderBy('marketCap', 'desc').value());
-        const {
-          dataTokensMarketCap,
-          dataTokensVolume,
-          oceanMarketCap,
-          oceanPrice,
-        } = res[1];
+  useEffect(() => {
+    const DATATOKENS_ENDPOINT_URL = `https://data-marketcap-backend.herokuapp.com/datatokens`;
+    // const DATATOKENS_ENDPOINT_URL = `http://127.0.0.1:5000/datatokens`;
 
-        setStats({
-          totalTokens: res[0].length,
-          oceanPrice,
-          oceanMarketCap,
-          dataTokensVolume,
-          dataTokensVolumeInOcean: dataTokensVolume / oceanPrice,
-          totalMarketCap: dataTokensMarketCap,
-          totalMarketCapInOcean: dataTokensMarketCap / oceanPrice,
-        });
-      })
-      .catch((err) => console.log(err));
-  };
+    const fetchData = async () => {
+      const res = await fetch(DATATOKENS_ENDPOINT_URL);
+      res
+        .json()
+        .then((res) => {
+          setAllTokenList(_(res[0]).orderBy('marketCap', 'desc').value());
+          const {
+            dataTokensLiquidity,
+            dataTokensMarketCap,
+            oceanMarketCap,
+            oceanPrice,
+            totalLiquidityOcean,
+          } = res[1];
 
-  useEffect(() => fetchData(), []);
+          setStats({
+            totalTokens: res[0].length,
+            oceanPrice,
+            oceanMarketCap,
+            dataTokensLiquidity,
+            totalLiquidityOcean,
+            totalMarketCap: dataTokensMarketCap,
+            totalMarketCapInOcean: dataTokensMarketCap / oceanPrice,
+          });
+        })
+        .catch((err) => console.log(err));
+    };
+    fetchData();
+  }, []);
 
   return (
     <Grommet theme={grommet} cssVars full themeMode={dark ? 'dark' : 'light'}>
